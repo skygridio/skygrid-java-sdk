@@ -1,0 +1,3 @@
+javac -d . dev/SkygridObject.java
+javac -d . dev/Project.java
+javac Test.java
