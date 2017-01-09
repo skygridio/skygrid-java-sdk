@@ -1,4 +1,4 @@
-package skygrid;
+package io.skygrid;
 import java.util.HashMap;
 import java.lang.*;
 

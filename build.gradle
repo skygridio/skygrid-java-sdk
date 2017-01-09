@@ -1,0 +1,39 @@
+apply plugin: 'java'
+
+sourceSets {
+    
+    skygrid {
+        java {
+            srcDir 'src/skygrid'
+        }
+    }
+    
+    main {
+        java {
+            srcDir 'src/main'
+        }
+        compileClasspath += sourceSets.skygrid.output
+    }
+    
+    test {
+        java {
+            srcDir 'src/test'
+        }
+        compileClasspath += sourceSets.skygrid.output
+    }
+}
+
+configurations {
+    mainCompile {
+        extendsFrom skygridCompile
+    }
+}
+
+
+
+jar {
+    from sourceSets.skygrid.output
+    manifest {
+        attributes 'Main-class': 'com.example.main.App'
+    }
+}

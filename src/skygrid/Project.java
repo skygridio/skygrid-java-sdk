@@ -1,4 +1,4 @@
-package skygrid;
+package io.skygrid;
 import java.lang.*;
 
 public class Project extends SkygridObject{
