@@ -1,9 +1,10 @@
 package io.skygrid;
 
-import java.util.HashMap;
+import com.google.gson.JsonObject;
 
 public class Util {
-    public static HashMap<String, String> deepClone(HashMap <String,String> map) {
-        return new HashMap<String,String>(map);
+    public static JsonObject deepClone(JsonObject ob) {
+        //TODO implement proper clonging
+        return new JsonObject();
     }
 }
