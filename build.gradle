@@ -29,7 +29,6 @@ sourceSets {
 
 dependencies {
    skygridCompile 'com.google.code.gson:gson:2.8.0'
-   compile 'com.google.code.gson:gson:2.8.0'
 }
 
 
@@ -42,7 +41,7 @@ configurations {
 
 task fatJar(type: Jar) {
     baseName = project.name + '-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    from { configurations.skygridCompile.collect { it.isDirectory() ? it : zipTree(it) } }
     manifest {
         attributes 'Main-class': 'com.example.main.App'
     }
