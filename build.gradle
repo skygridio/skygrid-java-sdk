@@ -1,5 +1,9 @@
 apply plugin: 'java'
 
+repositories {
+    mavenCentral()
+}
+
 sourceSets {
     
     skygrid {
@@ -22,6 +26,12 @@ sourceSets {
         compileClasspath += sourceSets.skygrid.output
     }
 }
+
+dependencies {
+   skygridCompile 'com.google.code.gson:gson:2.8.0'
+}
+
+
 
 configurations {
     mainCompile {
