@@ -13,6 +13,7 @@ import java.util.function.*;
 
 import java.net.HttpURLConnection;  
 import java.net.URL;
+import java.net.URLEncoder;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -120,6 +121,213 @@ public class RestApi implements Api {
                 new EndpointParams("post",data.getAsJsonObject())
             );
         });
+        
+        this._endpoints.put("login",data -> {
+            JsonObject resp = this._fetchJsonSync(
+                "/login",
+                new EndpointParams("post",data.getAsJsonObject())
+            ).getAsJsonObject();
+            this._token = resp.get("token").getAsString();
+            return resp;
+        });
+        
+        this._endpoints.put("logout", data -> {
+            this._token = null;
+            return this._fetchJsonSync(
+                "/logout",
+                new EndpointParams("post")
+            );
+        });
+        
+        this._endpoints.put("fetchUser",data -> {
+            return this._fetchJsonSync(
+                "/users/".concat(data
+                        .getAsJsonObject()
+                        .get("userId")
+                        .getAsString()),
+                new EndpointParams("get")
+            );
+        });
+        
+        this._endpoints.put("findUsers", data -> {
+            JsonObject constraints = new JsonObject();
+            if(data.getAsJsonObject().has("constraints")) {
+                constraints = data
+                    .getAsJsonObject()
+                    .get("constraints")
+                    .getAsJsonObject();
+            }
+            return this._fetchJsonSync(
+                this.generateQueryUrl("/users",constraints),
+                new EndpointParams("get")
+            );
+        });
+        
+        this._endpoints.put("deleteUser", data -> {
+            return this._fetchJsonSync(
+                "/users/".concat(data
+                        .getAsJsonObject()
+                        .get("userId")
+                        .getAsString()),
+                new EndpointParams("delete")
+            );
+        });
+        
+        this._endpoints.put("requestPasswordReset", data -> {
+            return this._fetchJsonSync(
+                "/users/requestPasswordReset",
+                new EndpointParams("post", data.getAsJsonObject())
+            );
+        });
+        
+        this._endpoints.put("resetPassword", data -> {
+            return this._fetchJsonSync(
+                "/users/resetPassword",
+                new EndpointParams("post",data.getAsJsonObject())
+            );
+        });
+        
+        this._endpoints.put("fetchProject", data -> {
+            return this._fetchJsonSync(
+                "/projects/".concat(data
+                        .getAsJsonObject()
+                        .get("projectId")
+                        .getAsString()),
+                new EndpointParams("get")
+            );
+        });
+        
+        this._endpoints.put("updateProject", data -> {
+            return this._fetchJsonSync(
+                "/projects/".concat(data
+                        .getAsJsonObject()
+                        .get("projectId")
+                        .getAsString()),
+                new EndpointParams("put",data.getAsJsonObject())
+            );
+        });
+        
+        this._endpoints.put("addDeviceSchema", data -> {
+            return this._fetchJsonSync(
+                "/schemas",
+                new EndpointParams("post",data.getAsJsonObject())
+            );
+        });
+        
+        this._endpoints.put("findDeviceSchemas", data -> {
+            JsonObject constraints = new JsonObject();
+            if(data.getAsJsonObject().has("constraints")) {
+                constraints = data
+                    .getAsJsonObject()
+                    .get("constraints")
+                    .getAsJsonObject();
+            }
+            return this._fetchJsonSync(
+                this.generateQueryUrl("/schemas",constraints),
+                new EndpointParams("get")
+            );
+        });
+        
+        this._endpoints.put("fetchDeviceSchema", data -> {
+            return this._fetchJsonSync(
+                "/schemas/".concat(data
+                        .getAsJsonObject()
+                        .get("schemaId")
+                        .getAsString()),
+                new EndpointParams("get")
+            );
+        });
+        
+        this._endpoints.put("updateDeviceSchema", data -> {
+            return this._fetchJsonSync(
+                "/schemas/".concat(data
+                        .getAsJsonObject()
+                        .get("schemaId")
+                        .getAsString()),
+                new EndpointParams("put",data.getAsJsonObject())
+            );
+        });
+        
+        this._endpoints.put("deleteDeviceSchema", data -> {
+            return this._fetchJsonSync(
+                "/schemas/".concat(data
+                        .getAsJsonObject()
+                        .get("schemaId")
+                        .getAsString()),
+                new EndpointParams("delete")
+            );
+        });
+        
+        this._endpoints.put("findDevices", data -> {
+            JsonObject constraints = new JsonObject();
+            if(data.getAsJsonObject().has("constraints")) {
+                constraints = data
+                    .getAsJsonObject()
+                    .get("constraints")
+                    .getAsJsonObject();
+            }
+            return this._fetchJsonSync(
+                this.generateQueryUrl("/devices",constraints),
+                new EndpointParams("get")
+            );
+        });
+        
+        this._endpoints.put("addDevice", data -> {
+            return this._fetchJsonSync(
+                "/devices",
+                new EndpointParams("post",data.getAsJsonObject())
+            );
+        });
+        
+        this._endpoints.put("fetchDevice", data -> {
+            return this._fetchJsonSync(
+                "/devices/".concat(data
+                        .getAsJsonObject()
+                        .get("deviceId")
+                        .getAsString()),
+                new EndpointParams("get")
+            );
+        });
+        
+        this._endpoints.put("updateDevice", data -> {
+            return this._fetchJsonSync(
+                "/devices/".concat(data
+                        .getAsJsonObject()
+                        .get("deviceId")
+                        .getAsString()),
+                new EndpointParams("put",data.getAsJsonObject())
+            );
+        });
+        
+        this._endpoints.put("deleteDevice", data -> {
+            return this._fetchJsonSync(
+                "/devices/".concat(data
+                        .getAsJsonObject()
+                        .get("deviceId")
+                        .getAsString()),
+                new EndpointParams("delete")
+            );
+        });
+        
+        this._endpoints.put("fetchHistory", data -> {
+            return this._fetchJsonSync(
+                "/history/".concat(data
+                        .getAsJsonObject()
+                        .get("deviceId")
+                        .getAsString()),
+                new EndpointParams("get")
+            );
+        });
+        
+    }
+    
+    private String generateQueryUrl(String url, JsonObject constraints) {
+        String ret = url;
+        if(constraints.size() != 0)
+            ret = ret
+                .concat("?where=")
+                .concat(URLEncoder.encode(constraints.toString()));
+        return ret;
     }
     
     private JsonElement _fetchJsonSync(String url, EndpointParams params) {
@@ -161,9 +369,10 @@ public class RestApi implements Api {
         } catch( ProtocolException e) {
             throw new Error("You messed up son");
         } catch( Throwable e) {
+            System.err.println("In _fetchJsonSync");
             System.err.println(e.getMessage());
+            throw new Error(e.getMessage());
         }
-        return new JsonObject();
     }
     
 }
