@@ -39,8 +39,8 @@ configurations {
     }
 }
 
-task fatJar(type: Jar) {
-    baseName = project.name + '-all'
+task mainJar(type: Jar) {
+    baseName = 'main'
     from { configurations.skygridCompile.collect { it.isDirectory() ? it : zipTree(it) } }
     manifest {
         attributes 'Main-class': 'com.example.main.App'
