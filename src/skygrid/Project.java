@@ -33,14 +33,17 @@ public class Project extends SkygridObject {
     }
   }
 
-  public Project(String projectId,String address,String api){
+  public Project(String projectId, String address, String api){
     this.projectId = projectId;
-    if(api == "rest")
+    if(api == "rest") {
       this._api = new RestApi(address,projectId);
-    else if(api == "socketio")
+    }
+    else if(api == "socketio") {    
       throw new Error("Scoket IO Api not yet implemented");
-    else
-      throw new Error("invalid api arg");
+    }
+    else {
+      throw new Error("invalid api arg");    
+    }
   }
 
   public Project(String projectId, String address) {

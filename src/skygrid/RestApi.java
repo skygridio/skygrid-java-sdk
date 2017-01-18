@@ -33,7 +33,7 @@ public class RestApi implements Api {
       this.headers = new JsonObject();
     }
 
-    public EndpointParams(String m,JsonObject b) {
+    public EndpointParams(String m, JsonObject b) {
       this.method = m;
       this.body = b;
       this.headers = new JsonObject();
@@ -72,7 +72,7 @@ public class RestApi implements Api {
   String _token;
   Map<String,Function<JsonElement,JsonElement> > _endpoints;
 
-  public RestApi(String address,String projectId) {
+  public RestApi(String address, String projectId) {
     this.address = address;
     this.projectId = projectId;
     this._masterKey = null;

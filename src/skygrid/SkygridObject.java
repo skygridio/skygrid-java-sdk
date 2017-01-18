@@ -49,23 +49,23 @@ public class SkygridObject {
     //TODO learn about promises mate
   }
 
-  protected void _setDataProperty(String name,JsonElement value) {
+  protected void _setDataProperty(String name, JsonElement value) {
     this._changes.add(name,value);
     this._changed = true;
   }
-  protected void _setDataProperty(String name,Boolean value) {
+  protected void _setDataProperty(String name, Boolean value) {
     this._changes.addProperty(name,value);
     this._changed = true;
   }
-  protected void _setDataProperty(String name,Character value) {
+  protected void _setDataProperty(String name, Character value) {
     this._changes.addProperty(name,value);
     this._changed = true;
   }
-  protected void _setDataProperty(String name,Number value) {
+  protected void _setDataProperty(String name, Number value) {
     this._changes.addProperty(name,value);
     this._changed = true;
   }
-  protected void _setDataProperty(String name,String value) {
+  protected void _setDataProperty(String name, String value) {
     this._changes.addProperty(name,value);
     this._changed = true;
   }
@@ -82,9 +82,9 @@ public class SkygridObject {
     if(!this._changes.has("acl")) {
         //TODO do this after making Acl
         return null;
-        } else {
+    } else {
         return this._changes.get("acl");
-        }
+    }
   }
 
   protected void _setAclProperty(JsonElement value) {
@@ -100,9 +100,9 @@ public class SkygridObject {
   protected void _saveChanges(JsonElement changeDesc) {
     if( this._changed == true) {
 
-        } else {
+    } else {
 
-        }
+    }
   }
 
   //TODO depends on Api.request
