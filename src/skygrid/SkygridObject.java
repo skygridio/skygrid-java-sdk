@@ -80,10 +80,10 @@ public class SkygridObject {
   //NOTE consider returning Acl instead of JsonElement
   protected JsonElement _getAclProperty() {
     if(!this._changes.has("acl")) {
-        //TODO do this after making Acl
-        return null;
+      //TODO do this after making Acl
+      return null;
     } else {
-        return this._changes.get("acl");
+      return this._changes.get("acl");
     }
   }
 

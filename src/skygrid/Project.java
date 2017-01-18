@@ -37,12 +37,10 @@ public class Project extends SkygridObject {
     this.projectId = projectId;
     if(api == "rest") {
       this._api = new RestApi(address,projectId);
-    }
-    else if(api == "socketio") {    
+    } else if(api == "socketio") {
       throw new Error("Scoket IO Api not yet implemented");
-    }
-    else {
-      throw new Error("invalid api arg");    
+    } else {
+      throw new Error("invalid api arg");
     }
   }
 
@@ -70,10 +68,10 @@ public class Project extends SkygridObject {
       .add("email",email)
       .add("password",email)
       .generate()
-      )
-      .getAsJsonObject()
-      .get("id")
-      .getAsString();
+    )
+           .getAsJsonObject()
+           .get("id")
+           .getAsString();
   }
 
   public void loginMaster(String masterKey) {
@@ -82,6 +80,6 @@ public class Project extends SkygridObject {
       new ParamsBuilder()
       .add("masterKey",masterKey)
       .generate()
-      );
+    );
   }
 }
