@@ -7,4 +7,6 @@ public interface Api {
   public JsonElement requestSync(String name, JsonElement data);
   public JsonElement requestSync(String name);
   public void close();
+  
+  public Boolean hasMasterkey();
 }

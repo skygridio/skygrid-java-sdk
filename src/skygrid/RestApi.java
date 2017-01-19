@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.ProtocolException;
 
 import java.lang.Error;
@@ -19,6 +20,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import io.skygrid.Api;
 
 public class RestApi implements Api {
 
@@ -62,6 +64,10 @@ public class RestApi implements Api {
     this._token = null;
     this._endpoints = new HashMap<String,Function<JsonElement,JsonElement> >();
     this._setupEndpoints();
+  }
+  
+  public Boolean hasMasterkey() {
+    return this._masterKey != null;
   }
 
   public void close() {
@@ -311,9 +317,13 @@ public class RestApi implements Api {
   private String generateQueryUrl(String url, JsonObject constraints) {
     String ret = url;
     if(constraints.size() != 0) {
-      ret = ret
-            .concat("?where=")
-            .concat(URLEncoder.encode(constraints.toString()));
+      try { 
+        ret = ret
+          .concat("?where=")
+          .concat(URLEncoder.encode(constraints.toString(),"UTF-8"));
+      } catch (UnsupportedEncodingException e) {
+        throw new SkygridError("bad encoding");
+      }
     }
     return ret;
   }

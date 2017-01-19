@@ -3,14 +3,16 @@ import java.lang.*;
 import io.skygrid.Util;
 import io.skygrid.Api;
 import io.skygrid.Acl;
+import io.skygrid.SkygridError;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonElement;
 
 public class SkygridObject {
-  JsonObject _data;
-  Boolean _fetched = false;
-  JsonObject _changes;
-  Boolean _changed = false;
+  protected JsonObject _data;
+  protected Boolean _fetched = false;
+  protected JsonObject _changes;
+  protected Boolean _changed = false;
   JsonObject _changeDefaults;
   Api _api;
 
@@ -18,6 +20,14 @@ public class SkygridObject {
     this._changeDefaults = new JsonObject();
     this._data = new JsonObject();
     this._changes = new JsonObject();
+    this._api = null;
+  }
+  
+  public SkygridObject(Api api, JsonObject changeDefaults, JsonObject data) {
+    this._changeDefaults = changeDefaults;
+    this._data = data;
+    this._changes = changeDefaults;
+    this._api = api;
   }
 
   public String id() {
@@ -93,6 +103,7 @@ public class SkygridObject {
 
   protected void _setAclProperty(Acl value) {
     //TODO convert Acl to JsonElement and then call overloaded function
+    throw new SkygridError("_setAclProperty(Acl) not yet implemented");
   }
 
   //TODO this depends on how Api.request is implemented (some sort of Promise)

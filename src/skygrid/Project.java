@@ -1,6 +1,8 @@
 package io.skygrid;
 
-import io.skygrid.*;
+import io.skygrid.SkygridObject;
+import io.skygrid.Api;
+import io.skygrid.JsonObjectBuilder;
 
 import java.lang.Error;
 
@@ -12,26 +14,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
+
+
 public class Project extends SkygridObject {
   String projectId;
   Api _api;
 
-  private class ParamsBuilder {
-    JsonObject p;
-
-    public ParamsBuilder() {
-      p = new JsonObject();
-    }
-
-    public ParamsBuilder add(String k, String v) {
-      p.addProperty(k,v);
-      return this;
-    }
-
-    public JsonElement generate() {
-      return p;
-    }
-  }
+  private static String API_URL = "https://api.skygrid.io";
+  private static String SOCKETIO_URL = "https://api.skygrid.io:81";
 
   public Project(String projectId, String address, String api){
     this.projectId = projectId;
@@ -64,20 +54,20 @@ public class Project extends SkygridObject {
   public String signup(String email, String password) {
     return this._api.requestSync(
       "signup",
-      new ParamsBuilder()
+      new JsonObjectBuilder()
       .add("email",email)
       .add("password",email)
       .generate()
     )
-           .getAsJsonObject()
-           .get("id")
-           .getAsString();
+    .getAsJsonObject()
+    .getAsJsonPrimitive("id")
+    .getAsString();
   }
 
   public void loginMaster(String masterKey) {
     this._api.requestSync(
       "loginMaster",
-      new ParamsBuilder()
+      new JsonObjectBuilder()
       .add("masterKey",masterKey)
       .generate()
     );
