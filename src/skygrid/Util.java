@@ -43,23 +43,23 @@ public class Util {
     return target;
   }
   
-  public static JsonObject prepareChanges(JsonObject changes, JsonObject defaults) {
-    JsonObject ret = new JsonObject;
+  public static JsonObject prepareChanges(JsonObject changes, JsonObject ret) {
     for (Map.Entry<String,JsonElement> it : changes.entrySet()) {
       if(!it.getKey().equals("acl")) {
         ret.add(it.getKey(),it.getValue());
       } else if(!it.getValue().isJsonNull()) {
         //TODO: check if acl actually needs to be a string?
-        ret.add(it.getKey(),it.getValue().toString())
+        ret.addProperty(it.getKey(),it.getValue().toString());
       } else {
         ret.add(it.getKey(),null);
       }
     }
+    return ret;
   }
   
   public static JsonObject mergeAcl(JsonObject data, JsonObject changes) {
     if(! changes.has("acl")) {
-      data.add("acl",changes,get("acl"));
+      data.add("acl",changes.get("acl"));
     } else {
       data.remove("acl");
     }
