@@ -68,12 +68,11 @@ public class Schema extends SkygridObject {
     this._setDataProperty("name",name);
   }
   
-  //TODO change this to ACL
-  public JsonElement acl() {
+  public Acl acl() {
     return this._getAclProperty();
   }
   
-  public void acl(JsonElement e) {
+  public void acl(JsonObject e) {
     this._setAclProperty(e);
   }
   
@@ -162,11 +161,14 @@ public class Schema extends SkygridObject {
   
   @Override
   public void fetch() {
-    //TODO
-    //complete _fetch in SkygridObject first
+    this._fetch(
+      "fetchDeviceSchema",
+      new JsonObjectBuilder()
+          .add("schemaId",this.id())
+          .gen()
+    );
   }
   
-  //TODO: not sure if there needs to be a return type
   public void remove() {
     this._api.requestSync(
       "deleteDeviceSchema",

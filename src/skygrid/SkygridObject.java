@@ -47,7 +47,6 @@ public class SkygridObject {
     this._changed = false;
   }
 
-  //TODO None of these should be void return type
   public void save() {
     throw new Error("save not implemented for this object");
   }
@@ -57,7 +56,9 @@ public class SkygridObject {
   }
 
   public void fetchIfNeeded() {
-    //TODO learn about promises mate
+    if(this._fetched != true) {
+      this.fetch();
+    }
   }
 
   protected void _setDataProperty(String name, JsonElement value) {
@@ -88,31 +89,36 @@ public class SkygridObject {
       return this._data.get(name);
   }
 
-  //NOTE consider returning Acl instead of JsonElement
-  protected JsonElement _getAclProperty() {
+  protected Acl _getAclProperty() {
     if(!this._changes.has("acl")) {
-      //TODO do this after making Acl
       return null;
     } else {
-      return this._changes.get("acl");
+      return new Acl(this._changes.get("acl").getAsJsonObject());
     }
   }
 
-  protected void _setAclProperty(JsonElement value) {
+  protected void _setAclProperty(JsonObject value) {
     this._setDataProperty("acl",value);
   }
 
   protected void _setAclProperty(Acl value) {
-    //TODO convert Acl to JsonElement and then call overloaded function
-    throw new SkygridError("_setAclProperty(Acl) not yet implemented");
+    this._setAclProperty(value.permissions());
   }
 
-  //probably not void return type
-  protected void _saveChanges(JsonElement changeDesc) {
+  //pre changeDesc always has default prop
+  protected void _saveChanges(JsonObject changeDesc) {
     if( this._changed == true) {
-
-    } else {
-
+      JsonObject changes = Util.prepareChanges(this._changes, changeDesc.getAsJsonObject("default"));
+      this._api.requestSync(changeDesc.get("requestName").getAsString(), changes);
+    
+      this._data = Util.mergeFields(
+        this._data,
+        this._changes,
+        changeDesc.getAsJsonArray("fields"));
+    
+      if(changeDesc.has("hasAcl")) {
+        this._data = Util.mergeAcl(this._data, this._changes);
+      }
     }
   }
 

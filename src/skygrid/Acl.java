@@ -22,7 +22,7 @@ public class Acl {
     this._permissionsById = Util.deepClone(acl.permissions()).getAsJsonObject();
   }
   
-  private JsonObject permissions() {
+  public JsonObject permissions() {
     return this._permissionsById;
   }
   

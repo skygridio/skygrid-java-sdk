@@ -42,4 +42,14 @@ public class Util {
     }
     return target;
   }
+  
+  //TODO
+  public static JsonObject prepareChanges(JsonObject changes, JsonObject defaults) {
+    return new JsonObject();
+  }
+  
+  //TODO
+  public static JsonObject mergeAcl(JsonObject data, JsonObject changes) {
+    return new JsonObject();
+  }
 }
