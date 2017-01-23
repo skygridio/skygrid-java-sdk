@@ -45,14 +45,7 @@ public class Util {
   
   public static JsonObject prepareChanges(JsonObject changes, JsonObject ret) {
     for (Map.Entry<String,JsonElement> it : changes.entrySet()) {
-      if(!it.getKey().equals("acl")) {
-        ret.add(it.getKey(),it.getValue());
-      } else if(!it.getValue().isJsonNull()) {
-        //TODO: check if acl actually needs to be a string?
-        ret.addProperty(it.getKey(),it.getValue().toString());
-      } else {
-        ret.add(it.getKey(),null);
-      }
+      ret.add(it.getKey(),it.getValue());
     }
     return ret;
   }
