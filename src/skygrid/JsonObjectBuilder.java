@@ -23,9 +23,10 @@ public class JsonObjectBuilder {
     p.addProperty(k,v);
     return this;
   }
-
-  public JsonObject generate() {
-    return p;
+  
+  public JsonObjectBuilder add(String k, Integer v) {
+    p.addProperty(k,v);
+    return this;
   }
   
   public JsonObject gen() {

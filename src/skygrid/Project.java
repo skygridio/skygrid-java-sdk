@@ -18,7 +18,6 @@ import com.google.gson.JsonPrimitive;
 
 public class Project extends SkygridObject {
   String projectId;
-  Api _api;
 
   private static String API_URL = "https://api.skygrid.io";
   private static String SOCKETIO_URL = "https://api.skygrid.io:81";
@@ -57,7 +56,7 @@ public class Project extends SkygridObject {
       new JsonObjectBuilder()
       .add("email",email)
       .add("password",email)
-      .generate()
+      .gen()
     )
     .getAsJsonObject()
     .getAsJsonPrimitive("id")
@@ -69,7 +68,7 @@ public class Project extends SkygridObject {
       "loginMaster",
       new JsonObjectBuilder()
       .add("masterKey",masterKey)
-      .generate()
+      .gen()
     );
   }
 }

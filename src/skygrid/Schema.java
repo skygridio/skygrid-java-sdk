@@ -45,18 +45,18 @@ public class Schema extends SkygridObject {
     super(api,
           new JsonObjectBuilder()
             .add("properties", new JsonObject())
-            .generate(),
+            .gen(),
           new JsonObjectBuilder()
             .add("id",id)
             .add("properties", new JsonObject())
-            .generate());
+            .gen());
   }
   
   public Schema (Api api, JsonObject data) {
     super(api,
           new JsonObjectBuilder()
             .add("properties", new JsonObject())
-            .generate(),
+            .gen(),
           data);
   }
   

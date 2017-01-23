@@ -18,10 +18,6 @@ public class JsonArrayBuilder {
     p.add(v);
     return this;
   }
-
-  public JsonArray generate() {
-    return p;
-  }
   
   public JsonArray gen() {
     return p;
