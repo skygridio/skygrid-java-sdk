@@ -143,6 +143,7 @@ public class Schema extends SkygridObject {
     this._changes.add("properties",props);
   }
   
+  @Override
   public void save() {
     if(this._api.hasMasterkey()) {
       this._saveChanges(
@@ -158,6 +159,7 @@ public class Schema extends SkygridObject {
     }
   }
   
+  @Override
   public void fetch() {
     //TODO
     //complete _fetch in SkygridObject first

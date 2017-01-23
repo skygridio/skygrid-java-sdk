@@ -43,7 +43,7 @@ public class SkygridObject {
   }
 
   public void discardChanges() {
-    this._changes = Util.deepClone(this._changeDefaults);
+    this._changes = Util.deepClone(this._changeDefaults).getAsJsonObject();
     this._changed = false;
   }
 
@@ -106,7 +106,7 @@ public class SkygridObject {
     throw new SkygridError("_setAclProperty(Acl) not yet implemented");
   }
 
-  //TODO this depends on how Api.request is implemented (some sort of Promise)
+  //TODO complete Acl and Util
   //probably not void return type
   protected void _saveChanges(JsonElement changeDesc) {
     if( this._changed == true) {
@@ -116,8 +116,9 @@ public class SkygridObject {
     }
   }
 
-  //TODO depends on Api.request
-  protected void _fetch(String request, JsonElement desc) {
-    //TODO
+  protected JsonElement _fetch(String request, JsonElement desc) {
+    this._data = this._api.requestSync(request,desc).getAsJsonObject();
+    this._fetched = true;
+    return this._data;
   }
 }

@@ -29,6 +29,7 @@ sourceSets {
 
 dependencies {
    skygridCompile 'com.google.code.gson:gson:2.8.0'
+   compile 'com.google.code.gson:gson:2.8.0'
 }
 
 
@@ -48,6 +49,11 @@ task mainJar(type: Jar) {
     with jar
 }
 
+task pkgJar(type: Jar) {
+    baseName = 'pkg'
+    from { configurations.skygridCompile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar;
+}
 
 
 jar {
