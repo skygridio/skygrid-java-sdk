@@ -119,7 +119,7 @@ public class RestApi implements Api {
       JsonObject resp = this._fetchJsonSync(
         "/login",
         new EndpointParams("post",data.getAsJsonObject())
-                        ).getAsJsonObject();
+      ).getAsJsonObject();
       this._token = resp.get("token").getAsString();
       return resp;
     });

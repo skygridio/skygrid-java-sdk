@@ -47,6 +47,7 @@ public class SkygridObject {
     this._changed = false;
   }
 
+  //TODO None of these should be void return type
   public void save() {
     throw new Error("save not implemented for this object");
   }
@@ -106,7 +107,6 @@ public class SkygridObject {
     throw new SkygridError("_setAclProperty(Acl) not yet implemented");
   }
 
-  //TODO complete Acl and Util
   //probably not void return type
   protected void _saveChanges(JsonElement changeDesc) {
     if( this._changed == true) {

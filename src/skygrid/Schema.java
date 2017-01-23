@@ -68,6 +68,7 @@ public class Schema extends SkygridObject {
     this._setDataProperty("name",name);
   }
   
+  //TODO change this to ACL
   public JsonElement acl() {
     return this._getAclProperty();
   }
