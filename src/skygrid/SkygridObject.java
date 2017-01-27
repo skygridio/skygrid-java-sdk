@@ -10,13 +10,15 @@ import com.google.gson.JsonElement;
 
 public class SkygridObject {
   protected JsonObject _data;
-  protected Boolean _fetched = false;
+  protected Boolean _fetched;
   protected JsonObject _changes;
-  protected Boolean _changed = false;
-  JsonObject _changeDefaults;
-  Api _api;
+  protected Boolean _changed;
+  protected JsonObject _changeDefaults;
+  protected Api _api;
 
   public SkygridObject() {
+    this._fetched = false;
+    this._changed = false;
     this._changeDefaults = new JsonObject();
     this._data = new JsonObject();
     this._changes = new JsonObject();
@@ -26,8 +28,11 @@ public class SkygridObject {
   public SkygridObject(Api api, JsonObject changeDefaults, JsonObject data) {
     this._changeDefaults = changeDefaults;
     this._data = data;
+    //TODO NOT sure about this?
     this._changes = changeDefaults;
     this._api = api;
+    this._fetched = false;
+    this._changed = false;
   }
 
   public String id() {
