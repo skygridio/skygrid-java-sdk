@@ -30,7 +30,7 @@ public class Device extends SkygridObject {
     );
     this._subManager = manager;
   }
-  
+
   public Device(Api api, SubscriptionManager manager, JsonObject data) {
     super(
       api,
@@ -40,78 +40,78 @@ public class Device extends SkygridObject {
     this._fetched = data.has("properties");
     this._subManager = manager;
   }
-  
+
   public String name() {
     return this._getDataProperty("name").getAsString();
   }
-  
+
   public void name(String name) {
     this._setDataProperty("name",name);
   };
-  
+
   public Acl acl() {
     return this._getAclProperty();
   }
-  
+
   public void acl(JsonObject e) {
     this._setAclProperty(e);
   }
-  
+
   public void acl(Acl a) {
     this._setAclProperty(a);
   }
-  
+
   public Boolean log() {
     return this._getDataProperty("log").getAsBoolean();
   }
-  
+
   public void log(Boolean value) {
     this._setDataProperty("log",value);
   }
-  
+
   public String schemaId() {
     return this._getDataProperty("schemaId").getAsString();
   }
-  
+
   public Schema schema() {
     return new Schema(this._api, this.schemaId());
   }
-  
+
   public Map<String,Object> properties() {
     Map<String,Object> ret = new HashMap<String,Object>();
-    for (Map.Entry <String, JsonElement> it: 
+    for (Map.Entry <String, JsonElement> it:
       this._data.get("properties").getAsJsonObject().entrySet()) {
         JsonPrimitive elem = it.getValue().getAsJsonPrimitive();
         ret.put(it.getKey(),this._getAsObject(elem));
     }
-    
-    for (Map.Entry <String, JsonElement> it: 
+
+    for (Map.Entry <String, JsonElement> it:
       this._changes.get("properties").getAsJsonObject().entrySet()) {
         JsonPrimitive elem = it.getValue().getAsJsonPrimitive();
         ret.put(it.getKey(),this._getAsObject(elem));
     }
     return ret;
   }
-  
+
   public void set(String name, Number value) {
     this._set(name, new JsonPrimitive(value));
   }
-  
+
   public void set(String name, Boolean value) {
     this._set(name, new JsonPrimitive(value));
   }
-  
+
   public void set(String name, String value) {
     this._set(name, new JsonPrimitive(value));
   }
-  
+
   public void _set(String name, JsonPrimitive p) {
     JsonObject properties = this._changes.getAsJsonObject("properties");
     properties.add(name,p);
     this._changed = true;
     this._changes.add("properties",properties);
   }
-  
+
   //can be either String, Number or Boolean, null if no property
   public Object get(String name) {
     JsonObject properties = this._changes.getAsJsonObject("properties");
@@ -122,14 +122,14 @@ public class Device extends SkygridObject {
     } else {
       return null;
     }
-    
+
   }
-  
+
   public Boolean propertyExists(String name) {
     return this._data.getAsJsonObject("properties").has(name);
   }
-  
-  public void save() {
+
+  public Device save() {
     this._saveChanges(
       new JsonObjectBuilder()
           .add(
@@ -144,25 +144,27 @@ public class Device extends SkygridObject {
           .add("hasAcl",true)
           .gen()
     );
+    return this;
   }
-  
-  public void fetch() {
+
+  public Device fetch() {
     this._fetch(
       "fetchDevice",
       new JsonObjectBuilder().add("deviceId",this.id()).gen()
     );
     this._data = Util.fixDataDates(this._data);
+    return this;
   }
-  
+
   //TODO change this to sometheing that doesn't return a JsonElement
   //maybe a List<E>
   public JsonElement history(Date start, Date end) {
-    
+
     JsonObject time = new JsonObject();
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
     time.addProperty("$gte",df.format(start));
     time.addProperty("$lte",df.format(end));
-    
+
     return this._api.requestSync(
       "fetchHistory",
       new JsonObjectBuilder()
@@ -173,16 +175,16 @@ public class Device extends SkygridObject {
             .gen()
         )
         .gen()
-    );                  
+    );
   }
-  
+
   public JsonElement history(Date start, Date end, Integer limit) {
-    
+
     JsonObject time = new JsonObject();
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
     time.addProperty("$gte",df.format(start));
     time.addProperty("$lte",df.format(end));
-    
+
     return this._api.requestSync(
       "fetchHistory",
       new JsonObjectBuilder()
@@ -197,9 +199,9 @@ public class Device extends SkygridObject {
           limit
         )
         .gen()
-    );                  
+    );
   }
-  
+
   public void remove() {
     this._api.requestSync(
       "deleteDevice",
@@ -208,9 +210,9 @@ public class Device extends SkygridObject {
         .gen()
     );
   }
-  
+
   //TODO implement the subscribe functions after implementing socketio api
-  
+
   private Object _getAsObject(JsonPrimitive p) {
     if(p.isBoolean()) {
       return p.getAsBoolean();

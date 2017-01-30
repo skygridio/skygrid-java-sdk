@@ -24,7 +24,7 @@ public class SkygridObject {
     this._changes = new JsonObject();
     this._api = null;
   }
-  
+
   public SkygridObject(Api api, JsonObject changeDefaults, JsonObject data) {
     this._changeDefaults = changeDefaults;
     this._data = data;
@@ -52,17 +52,19 @@ public class SkygridObject {
     this._changed = false;
   }
 
-  public void save() {
+  public SkygridObject save() {
     throw new Error("save not implemented for this object");
   }
 
-  public void fetch() {
+  public SkygridObject fetch() {
     throw new Error("fetch not implemented for this object");
   }
 
-  public void fetchIfNeeded() {
+  public SkygridObject fetchIfNeeded() {
     if(this._fetched != true) {
-      this.fetch();
+      return this.fetch();
+    } else {
+      return null;
     }
   }
 
@@ -115,12 +117,12 @@ public class SkygridObject {
     if( this._changed == true) {
       JsonObject changes = Util.prepareChanges(this._changes, changeDesc.getAsJsonObject("default"));
       this._api.requestSync(changeDesc.get("requestName").getAsString(), changes);
-    
+
       this._data = Util.mergeFields(
         this._data,
         this._changes,
         changeDesc.getAsJsonArray("fields"));
-    
+
       if(changeDesc.has("hasAcl")) {
         this._data = Util.mergeAcl(this._data, this._changes);
       }
