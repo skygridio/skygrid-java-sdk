@@ -32,8 +32,6 @@ dependencies {
    compile 'com.google.code.gson:gson:2.8.0'
 }
 
-
-
 configurations {
     mainCompile {
         extendsFrom skygridCompile
@@ -49,21 +47,13 @@ task mainJar(type: Jar) {
     with jar
 }
 
-task pkgJar(type: Jar) {
+task pkgJar(type: Jar ) {
     baseName = 'pkg'
+    from sourceSets.skygrid.output
     from { configurations.skygridCompile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar;
 }
 
 task docs (type: Javadoc) {
     source = sourceSets.skygrid.allJava
     classpath = project.sourceSets.skygrid.compileClasspath
-}
-
-
-jar {
-    from sourceSets.skygrid.output
-    manifest {
-        attributes 'Main-class': 'com.example.main.App'
-    }
 }

@@ -123,6 +123,7 @@ public class Project extends SkygridObject {
       .getAsString());
     } catch ( ParseException e) {
       System.out.println("Something is seriously wrong");
+      return null;
     }
   }
 
