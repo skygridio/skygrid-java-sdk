@@ -5,20 +5,20 @@ repositories {
 }
 
 sourceSets {
-    
+
     skygrid {
         java {
             srcDir 'src/skygrid'
         }
     }
-    
+
     main {
         java {
             srcDir 'src/main'
         }
         compileClasspath += sourceSets.skygrid.output
     }
-    
+
     test {
         java {
             srcDir 'src/test'
@@ -53,6 +53,11 @@ task pkgJar(type: Jar) {
     baseName = 'pkg'
     from { configurations.skygridCompile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar;
+}
+
+task docs (type: Javadoc) {
+    source = sourceSets.skygrid.allJava
+    classpath = project.sourceSets.skygrid.compileClasspath
 }
 
 

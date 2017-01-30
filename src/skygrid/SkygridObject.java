@@ -28,7 +28,6 @@ public class SkygridObject {
   public SkygridObject(Api api, JsonObject changeDefaults, JsonObject data) {
     this._changeDefaults = changeDefaults;
     this._data = data;
-    //TODO NOT sure about this?
     this._changes = changeDefaults;
     this._api = api;
     this._fetched = false;

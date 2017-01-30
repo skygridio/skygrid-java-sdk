@@ -23,7 +23,6 @@ import com.google.gson.JsonPrimitive;
 
 public class Project extends SkygridObject {
   String projectId;
-  //TODO this does not sound like a good idea
   JsonObject _user;
   Api _api;
   SubscriptionManager _subManager;
@@ -31,7 +30,12 @@ public class Project extends SkygridObject {
   private static String API_URL = "https://api.skygrid.io";
   private static String SOCKETIO_URL = "https://api.skygrid.io:81";
 
-  public Project(String projectId, String address, String api){
+  /**
+   * @param projectId the id of the specified project
+   * @param address the absolute URL of the api (default is "https://api.skygrid.io")
+   * @param api the api type (either "rest" (default) or "socketio")
+   */
+  public Project(String projectId, String address, String api) {
     this.projectId = projectId;
     if(api == "rest") {
       this._api = new RestApi(address,projectId);
@@ -43,32 +47,61 @@ public class Project extends SkygridObject {
     this._subManager = new SubscriptionManager(this._api);
   }
 
+  /**
+   * overloaded constructor
+   * @param projectId     id
+   * @param address       address of the api
+   */
   public Project(String projectId, String address) {
     this(projectId,address,"rest");
   }
 
+  /**
+   * overloaded constructor
+   * @param projectId     id
+   */
   public Project(String projectId) {
     this(projectId,"https://api.skygrid.io","rest");
   }
 
+  /**
+   * Getter
+   * @return String name of the project
+   */
   public String name() {
       return this._getDataProperty("name").getAsString();
   }
 
+  /**
+   * Getter
+   * @return Boolean whether signup of new users is permitted
+   */
   public Boolean allowSignup() {
       return this._getDataProperty("allowSignup")
                  .getAsJsonPrimitive()
                  .getAsBoolean();
   }
 
+  /**
+   * Setter
+   * @param value whether the project should allow signups or not
+   */
   public void allowSignup(Boolean value) {
       this._setDataProperty("allowSignup",value);
   }
 
+  /**
+   * Getter
+   * @return Acl current Access plans of the project
+   */
   public Acl acl() {
       return this._getAclProperty();
   }
 
+  /**
+   * Setter
+   * @param value new Acl to apply to the project
+   */
   public void acl(Acl value) {
       this._setAclProperty(value);
   }
@@ -81,13 +114,16 @@ public class Project extends SkygridObject {
       this._setDataProperty("meta",value);
   }
 
-  public Date fetchServerTime() throws ParseException {
-    SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
-    return f.parse(
+  public Date fetchServerTime() {
+    try {
+      SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+      return f.parse(
       this._api
       .requestSync("getServerTime")
-      .getAsString())
-    ;
+      .getAsString());
+    } catch ( ParseException e) {
+      System.out.println("Something is seriously wrong");
+    }
   }
 
   public String signup(String email, String password) {
@@ -103,6 +139,10 @@ public class Project extends SkygridObject {
     .getAsString();
   }
 
+  /**
+   * changes the session to a master session (with more privileges)
+   * @param masterKey the master key
+   */
   public void loginMaster(String masterKey) {
     this._api.requestSync(
       "loginMaster",
@@ -112,7 +152,13 @@ public class Project extends SkygridObject {
     );
   }
 
-  public void login(String email, String password) {
+  /**
+   * logins a user
+   * @param email    email
+   * @param password password
+   * @return String id of the user
+   */
+  public String login(String email, String password) {
     JsonObject data = this._api.requestSync(
       "login",
       new JsonObjectBuilder()
@@ -126,17 +172,34 @@ public class Project extends SkygridObject {
       .add("id",data.get("userId"))
       .add("token",data.get("token"))
       .gen();
+    return data.get("userId").getAsString();
   }
 
+  /**
+   * logouts out of the current session
+   */
   public void logout() {
     this._api.requestSync("logout");
     this._user = null;
   }
 
+  /**
+   * returns a user
+   * @param  userId        id of the user in the project
+   * @return User the User object for the specified user
+   */
   public User user(String userId) {
     return new User(this._api, userId);
   }
 
+  /**
+   * TODO provide documentation for constraints
+   * TODO change the JsonObject constraints to something else (maybe another class)
+   * a list of users that match the constraints provided
+   * @param  constraints   constraints object
+   * @param    fetch         whether the users should be fetched or not
+   * @return the list of users
+   */
   public List<User> users(JsonObject constraints, Boolean fetch) {
     JsonArray data = this._api.requestSync(
       "findUsers",
@@ -152,10 +215,21 @@ public class Project extends SkygridObject {
     return ret;
   }
 
+  /**
+   * Overloaded function
+   * @param  constraints constrains to search for
+   * @return the list of users
+   */
   public List<User> users(JsonObject constraints) {
     return users(constraints,true);
   }
 
+  /**
+   * adds a new Schema
+   * @param       name          name of the Schema
+   * @param   properties    The properties of the schema
+   * @return            The new Schema object
+   */
   public Schema addSchema(String name, JsonObject properties) {
     JsonObject data = this._api.requestSync(
       "addDeviceSchema",
@@ -167,10 +241,21 @@ public class Project extends SkygridObject {
     return this.schema(data.get("id").getAsString()).fetch();
   }
 
+  /**
+   * gets a schema instance
+   * @param  schemaId      the id of the schema to get
+   * @return Schema the Schema object
+   */
   public Schema schema(String schemaId) {
     return new Schema(this._api, schemaId);
   }
 
+  /**
+   * gets the list of schemas that match some constraints
+   * @param  constraints   constraints object
+   * @param  fetch         whether to fetch the schemas or not
+   * @return List of schemas
+   */
   public List<Schema> schemas(JsonObject constraints, Boolean fetch) {
     JsonArray data = this._api.requestSync(
       "findDeviceSchemas",
@@ -186,10 +271,21 @@ public class Project extends SkygridObject {
     return ret;
   }
 
+  /**
+   * overloaded function
+   * @param constraints   constraints object
+   * @return List of users
+   */
   public List<Schema> schemas(JsonObject constraints) {
     return schemas(constraints,true);
   }
 
+  /**
+   * adds a new device
+   * @param  name          name of the device
+   * @param  schema        The schema the device will follow
+   * @return        The newly added Device object
+   */
   public Device addDevice(String name, Schema schema) {
     JsonObject data = this._api.requestSync(
       "addDevice",
@@ -201,10 +297,21 @@ public class Project extends SkygridObject {
     return this.device(data.get("id").getAsString()).fetch();
   }
 
+  /**
+   * gets a particular device
+   * @param  deviceId      id of the device
+   * @return Device
+   */
   public Device device(String deviceId) {
     return new Device(this._api, this._subManager, deviceId);
   }
 
+  /**
+   * gets a list of Devices that match soem constraints
+   * @param  constraints   constraints object
+   * @param  fetch         whether to fetch the object or not
+   * @return list of devices
+   */
   public List<Device> devices(JsonObject constraints, Boolean fetch) {
     JsonArray data = this._api.requestSync(
       "findeDevices",
@@ -220,10 +327,19 @@ public class Project extends SkygridObject {
     return ret;
   }
 
+  /**
+   * Overloaded Constructor
+   * @param  constraints cosntraints to search for
+   * @return the list of devices
+   */
   public List<Device> devices(JsonObject constraints) {
     return devices(constraints,true);
   }
 
+  /**
+   * fetches the current Project
+   * @return Project this project
+   */
   public Project fetch() {
     this._fetch(
       "fetchProject",
@@ -234,6 +350,10 @@ public class Project extends SkygridObject {
     return this;
   }
 
+  /**
+   * saves the current project
+   * @return Project this Project
+   */
   public Project save() {
     if (!this._api.hasMasterkey()) {
 			throw new SkygridError("Can only edit projects when using the master key");
