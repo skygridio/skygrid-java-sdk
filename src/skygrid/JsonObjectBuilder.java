@@ -2,6 +2,20 @@ package io.skygrid;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonElement;
 
+/**
+ * A builder class to create JsonObjects <br>
+ *
+ * <pre>
+ * Usage :
+ * JsonElement e = new JsonObject();
+ * JsonObject o = new JsonObjectBuilder()
+ *                .add("key","value")
+ *                .add("num",1)
+ *                .add("element",e)
+ *                .gen()
+ * </pre>
+ *
+ */
 public class JsonObjectBuilder {
   JsonObject p;
 
