@@ -40,6 +40,7 @@ configurations {
 
 task mainJar(type: Jar) {
     baseName = 'main'
+    from sourceSets.skygrid.output
     from { configurations.skygridCompile.collect { it.isDirectory() ? it : zipTree(it) } }
     manifest {
         attributes 'Main-class': 'com.example.main.App'

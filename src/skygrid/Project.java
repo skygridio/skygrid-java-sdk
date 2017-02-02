@@ -21,10 +21,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonPrimitive;
 
+/**
+ * This class has all the information and methods to manipulate and work with a skygrid Project. This is also the main entry point to the sdk. the other objects (such as Device, Schema .. ) is returned from public methods of this class
+ */
 public class Project extends SkygridObject {
   String projectId;
   JsonObject _user;
-  Api _api;
   SubscriptionManager _subManager;
 
   private static String API_URL = "https://api.skygrid.io";
@@ -36,24 +38,31 @@ public class Project extends SkygridObject {
    * @param api the api type (either "rest" (default) or "socketio")
    */
   public Project(String projectId, String address, String api) {
-    this.projectId = projectId;
+    //in JAva the super call must be first
+    super(
+    new RestApi(address,projectId),
+    new JsonObject(),
+    new JsonObjectBuilder()
+    .add("id",projectId)
+    .gen()
+    );
     if(api == "rest") {
-      this._api = new RestApi(address,projectId);
     } else if(api == "socketio") {
       throw new Error("Scoket IO Api not yet implemented");
     } else {
       throw new Error("invalid api arg");
     }
+    this.projectId = projectId;
     this._subManager = new SubscriptionManager(this._api);
   }
 
   /**
    * overloaded constructor
    * @param projectId     id
-   * @param address       address of the api
+   * @param api api type
    */
-  public Project(String projectId, String address) {
-    this(projectId,address,"rest");
+  public Project(String projectId, String api) {
+    this(projectId,Project.API_URL,api);
   }
 
   /**
@@ -203,14 +212,14 @@ public class Project extends SkygridObject {
   }
 
   /**
-   * TODO provide documentation for constraints
-   * TODO change the JsonObject constraints to something else (maybe another class)
-   * a list of users that match the constraints provided
+   * gets a list of users that match the constraints provided
    * @param  constraints   constraints object
    * @param    fetch         whether the users should be fetched or not
    * @return the list of users
    */
   public List<User> users(JsonObject constraints, Boolean fetch) {
+    //TODO change the type of constraints to something else (like a class)
+    //TODO provide documentation on constraints
     JsonArray data = this._api.requestSync(
       "findUsers",
       new JsonObjectBuilder()
@@ -288,6 +297,14 @@ public class Project extends SkygridObject {
    */
   public List<Schema> schemas(JsonObject constraints) {
     return schemas(constraints,true);
+  }
+
+  /**
+   * overloaded function
+   * @return all schemas of this project
+   */
+  public List <Schema> schemas() {
+    return schemas(new JsonObject(), true);
   }
 
   /**
