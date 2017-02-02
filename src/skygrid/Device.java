@@ -22,6 +22,12 @@ import java.util.HashMap;
 
 public class Device extends SkygridObject {
   SubscriptionManager _subManager;
+
+  /**
+   * @param api Api to use for this Device
+   * @param manager Subscription Manager to be used for this Devcice
+   * @param deviceId String representing the id of the device
+   */
   public Device(Api api, SubscriptionManager manager, String deviceId) {
     super(
       api,
@@ -31,52 +37,87 @@ public class Device extends SkygridObject {
     this._subManager = manager;
   }
 
-  public Device(Api api, SubscriptionManager manager, JsonObject data) {
-    super(
-      api,
-      new JsonObjectBuilder().add("properties", new JsonObject()).gen(),
-      Util.fixDataDates(data)
-    );
-    this._fetched = data.has("properties");
-    this._subManager = manager;
-  }
+  // probably not needed?
+  // public Device(Api api, SubscriptionManager manager, JsonObject data) {
+  //   super(
+  //     api,
+  //     new JsonObjectBuilder().add("properties", new JsonObject()).gen(),
+  //     Util.fixDataDates(data)
+  //   );
+  //   this._fetched = data.has("properties");
+  //   this._subManager = manager;
+  // }
 
+  /**
+   * function to get the name of the Device
+   */
   public String name() {
     return this._getDataProperty("name").getAsString();
   }
 
+  /**
+   * function to set the name of the device
+   */
   public void name(String name) {
     this._setDataProperty("name",name);
   };
 
+  /**
+   * get the Acl of this device
+   */
   public Acl acl() {
     return this._getAclProperty();
   }
 
-  public void acl(JsonObject e) {
-    this._setAclProperty(e);
-  }
-
+  /**
+   * set the Acl
+   */
   public void acl(Acl a) {
     this._setAclProperty(a);
   }
 
+  /**
+  * overloaded function
+  */
+  public void acl(JsonObject e) {
+    this._setAclProperty(e);
+  }
+
+  /**
+   * if log is set or not
+   */
   public Boolean log() {
     return this._getDataProperty("log").getAsBoolean();
   }
 
+  /**
+   * set the log
+   */
   public void log(Boolean value) {
     this._setDataProperty("log",value);
   }
 
+  /**
+   * get the schemaId of this device
+   */
   public String schemaId() {
     return this._getDataProperty("schemaId").getAsString();
   }
 
+  /**
+   * get the Schema instance
+   */
   public Schema schema() {
     return new Schema(this._api, this.schemaId());
   }
 
+  /**
+   * returns a Map of String to Object <br>
+   * The Key represents the property defined in Schema <br>
+   * The Object is the value (could be String, Number, Boolean)
+   *
+   * @see Schema
+   */
   public Map<String,Object> properties() {
     Map<String,Object> ret = new HashMap<String,Object>();
     for (Map.Entry <String, JsonElement> it:
@@ -93,14 +134,23 @@ public class Device extends SkygridObject {
     return ret;
   }
 
+  /**
+   * set a value for a property
+   */
   public void set(String name, Number value) {
     this._set(name, new JsonPrimitive(value));
   }
 
+  /**
+   * overloaded function
+   */
   public void set(String name, Boolean value) {
     this._set(name, new JsonPrimitive(value));
   }
 
+  /**
+   * overloaded function
+   */
   public void set(String name, String value) {
     this._set(name, new JsonPrimitive(value));
   }
@@ -112,7 +162,10 @@ public class Device extends SkygridObject {
     this._changes.add("properties",properties);
   }
 
-  //can be either String, Number or Boolean, null if no property
+  /**
+   * gets the property as an Object
+   * the Object could be String, Number, Boolean or null
+   */
   public Object get(String name) {
     JsonObject properties = this._changes.getAsJsonObject("properties");
     if(properties.has(name)) {
@@ -125,6 +178,9 @@ public class Device extends SkygridObject {
 
   }
 
+  /**
+   * checks if the property exists
+   */
   public Boolean propertyExists(String name) {
     return this._data.getAsJsonObject("properties").has(name);
   }
@@ -178,6 +234,10 @@ public class Device extends SkygridObject {
     );
   }
 
+  /**
+   * returns history of this device
+   * TODO change the return type to a LIST of some kind
+   */
   public JsonElement history(Date start, Date end, Integer limit) {
 
     JsonObject time = new JsonObject();

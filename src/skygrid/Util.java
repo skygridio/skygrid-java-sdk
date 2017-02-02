@@ -8,16 +8,19 @@ import com.google.gson.JsonArray;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * A class with some static methods used internally
+ */
 public class Util {
   public static JsonElement deepClone(JsonElement ob) {
     JsonParser reader = new JsonParser();
     return reader.parse(ob.toString());
   }
-  
+
   public static Boolean objectEmpty(JsonObject ob) {
     return ob.size() == 0;
   }
-  
+
   //fields is an array of Strings
   public static JsonObject mergeFields(JsonObject target, JsonObject source, JsonArray fields) {
     for(JsonElement fieldName : fields) {
@@ -31,25 +34,25 @@ public class Util {
           targetField = new JsonObject();
         } else {
           targetField = targetFieldElem.getAsJsonObject();
-        } 
+        }
         for (Map.Entry<String,JsonElement> it : sourceField.getAsJsonObject().entrySet()) {
           targetField.add(it.getKey(), it.getValue());
         }
-        
+
         target.add(fieldName.getAsString(),targetField);
-        
+
       }
     }
     return target;
   }
-  
+
   public static JsonObject prepareChanges(JsonObject changes, JsonObject ret) {
     for (Map.Entry<String,JsonElement> it : changes.entrySet()) {
       ret.add(it.getKey(),it.getValue());
     }
     return ret;
   }
-  
+
   public static JsonObject mergeAcl(JsonObject data, JsonObject changes) {
     if(! changes.has("acl")) {
       data.add("acl",changes.get("acl"));
@@ -58,7 +61,7 @@ public class Util {
     }
     return data;
   }
-  
+
   public static JsonObject fixDataDates(JsonObject data) {
     return data;
   }

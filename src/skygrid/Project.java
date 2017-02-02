@@ -114,6 +114,9 @@ public class Project extends SkygridObject {
       this._setDataProperty("meta",value);
   }
 
+  /**
+   * fetches the current time at the server
+   */
   public Date fetchServerTime() {
     try {
       SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
@@ -127,6 +130,12 @@ public class Project extends SkygridObject {
     }
   }
 
+  /**
+   * signs up a new user to the project
+   * @param email email
+   * @param password password
+   * @return the id of the created user
+   */
   public String signup(String email, String password) {
     return this._api.requestSync(
       "signup",

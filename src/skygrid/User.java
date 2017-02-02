@@ -16,22 +16,37 @@ public class User extends SkygridObject {
           new JsonObjectBuilder().add("id",id).gen());
   }
 
+  /**
+   * Getter
+   */
   public String email() {
     return this._getDataProperty("email").getAsString();
   }
 
+  /**
+   * Setter
+   */
   public void email(String email) {
     this._setDataProperty("email",email);
   }
 
+  /**
+   * Getter
+   */
   public JsonElement meta () {
     return this._getDataProperty("meta");
   }
 
+  /**
+   * Setter
+   */
   public void meta(JsonElement meta) {
     this._setDataProperty("meta",meta);
   }
 
+  /**
+   * Saves the object to the server
+   */
   @Override
   public User save() {
     if(! this._api.hasMasterkey()) {
@@ -48,6 +63,9 @@ public class User extends SkygridObject {
     return this;
   }
 
+  /**
+   * Fetches the data of this object from the server
+   */
   @Override
   public User fetch() {
     this._fetch(

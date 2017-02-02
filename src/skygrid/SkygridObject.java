@@ -8,6 +8,11 @@ import io.skygrid.SkygridError;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonElement;
 
+/**
+ * This is an interface for most of the other objects that the sdk uses (Device, Schema, User) <br>
+ *
+ * This is not meant to be used by the enduser
+ */
 public class SkygridObject {
   protected JsonObject _data;
   protected Boolean _fetched;
@@ -34,14 +39,25 @@ public class SkygridObject {
     this._changed = false;
   }
 
+  /**
+   * gets id of this object
+   */
   public String id() {
     return this._data.get("id").getAsString();
   }
 
+  /**
+   * @return true if the object has been changed
+   */
   public Boolean isDirty() {
     return this._changed == true;
   }
 
+  /**
+   * checks if this object is synced with the server
+   *
+   * @return true if object is synced with server
+   */
   public Boolean isComplete() {
     return this._fetched == true;
   }
