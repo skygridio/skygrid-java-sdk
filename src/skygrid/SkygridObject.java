@@ -18,7 +18,7 @@ public class SkygridObject {
   protected Boolean _fetched;
   protected JsonObject _changes;
   protected Boolean _changed;
-  protected JsonObject _changeDefaults;
+  private JsonObject _changeDefaults;
   protected Api _api;
 
   public SkygridObject() {
