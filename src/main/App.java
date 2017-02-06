@@ -34,6 +34,16 @@ public class App {
         System.out.println(s);
         s.remove();
       }
+
+      System.out.println(p.devices().size());
+      for( Device d : p.devices()) {
+
+      }
+
+      System.out.println(p.users().size());
+      for( User d : p.users()) {
+
+      }
     } catch (Throwable e) {
       System.err.println("Error!");
       System.err.println(e.getMessage());

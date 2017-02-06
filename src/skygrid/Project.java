@@ -244,6 +244,13 @@ public class Project extends SkygridObject {
   }
 
   /**
+   * Overloaded Function
+   */
+  public List <User> users() {
+    return users(new JsonObject(), true);
+  }
+
+  /**
    * adds a new Schema
    * @param       name          name of the Schema
    * @param   properties    The properties of the schema
@@ -341,7 +348,7 @@ public class Project extends SkygridObject {
    */
   public List<Device> devices(JsonObject constraints, Boolean fetch) {
     JsonArray data = this._api.requestSync(
-      "findeDevices",
+      "findDevices",
       new JsonObjectBuilder()
           .add("constraints",constraints)
           .add("fetch",fetch)
@@ -355,12 +362,19 @@ public class Project extends SkygridObject {
   }
 
   /**
-   * Overloaded Constructor
+   * Overloaded Function
    * @param  constraints cosntraints to search for
    * @return the list of devices
    */
   public List<Device> devices(JsonObject constraints) {
     return devices(constraints,true);
+  }
+
+  /**
+   * Overloaded function
+   */
+  public List<Device> devices() {
+    return devices(new JsonObject(),true);
   }
 
   /**
