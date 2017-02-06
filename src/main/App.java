@@ -18,21 +18,22 @@ public class App {
         System.out.println(s.id());
         System.out.println(s.name());
       }
-      // p.loginMaster("ZVjceXBRgBd9a7HS249ztfuy");
+      p.loginMaster("ZVjceXBRgBd9a7HS249ztfuy");
       // p.addSchema(
-      //   "test",
+      //   "asas",
       //   new JsonObjectBuilder()
       //     .add(
-      //       "prop1",
+      //       "blah",
       //       new JsonObjectBuilder()
       //         .add("type","number")
       //         .gen()
       //     )
       //     .gen()
       // );
-      // for (Schema s : p.schemas()) {
-      //   System.out.println(s);
-      // }
+      for (Schema s : p.schemas()) {
+        System.out.println(s);
+        s.remove();
+      }
     } catch (Throwable e) {
       System.err.println("Error!");
       System.err.println(e.getMessage());

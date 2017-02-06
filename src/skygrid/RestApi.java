@@ -65,7 +65,7 @@ public class RestApi implements Api {
     this._endpoints = new HashMap<String,Function<JsonElement,JsonElement> >();
     this._setupEndpoints();
   }
-  
+
   public Boolean hasMasterkey() {
     return this._masterKey != null;
   }
@@ -317,7 +317,7 @@ public class RestApi implements Api {
   private String generateQueryUrl(String url, JsonObject constraints) {
     String ret = url;
     if(constraints.size() != 0) {
-      try { 
+      try {
         ret = ret
           .concat("?where=")
           .concat(URLEncoder.encode(constraints.toString(),"UTF-8"));
@@ -367,8 +367,8 @@ public class RestApi implements Api {
     } catch( ProtocolException e) {
       throw new Error("You messed up son");
     } catch( Throwable e) {
-      System.err.println("In _fetchJsonSync");
-      System.err.println(e.getMessage());
+      // System.err.println("In _fetchJsonSync");
+      // System.err.println(e.getMessage());
       throw new Error(e.getMessage());
     }
   }
